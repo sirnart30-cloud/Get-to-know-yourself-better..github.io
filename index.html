@@ -94,113 +94,23 @@ let traits = {
   calm:0, brave:0, emotional:0, discipline:0, freedom:0, reflective:0
 };
 
+// ตัวอย่างคำถาม 33 ข้อ
 let questions = [
-  {
-    q: "เมื่อคุณตื่นเช้ามา คุณรู้สึกขอบคุณหรือคิดถึงสิ่งใดเป็นอย่างแรกในชีวิต?",
-    options: [
-      {text:"กาแฟ ☕ ต้องมาก่อนทุกอย่าง", trait:"calm"},
-      {text:"แผนวันนี้ต้องทำให้เสร็จ 📅", trait:"planner"},
-      {text:"คิดถึงคนที่รัก 💖", trait:"social"},
-      {text:"โลกนี้สนุกมาก 🌈 จะทำอะไรดีนะ", trait:"creative"}
-    ]
-  },
-  {
-    q: "คุณคิดว่าความสุขของคุณขึ้นอยู่กับตัวเองมากน้อยแค่ไหน?",
-    options: [
-      {text:"ขึ้นอยู่กับตัวเองล้วน ๆ 💪", trait:"freedom"},
-      {text:"ต้องคิดวิเคราะห์ให้เข้าใจ 😎", trait:"thinker"},
-      {text:"อยู่กับเพื่อนจะมีความสุข 🕺", trait:"social"},
-      {text:"ขึ้นอยู่กับสถานการณ์ 🎢", trait:"calm"}
-    ]
-  },
-  {
-    q: "เวลาเจอความล้มเหลว คุณมักตอบสนองอย่างไร?",
-    options: [
-      {text:"ยอมรับ เรียนรู้ และลองใหม่ 💡", trait:"brave"},
-      {text:"วิเคราะห์ว่าผิดพลาดตรงไหน 🤯", trait:"thinker"},
-      {text:"ปรึกษาเพื่อนเพื่อหาทางออก 🗣️", trait:"social"},
-      {text:"พักก่อน แล้วค่อยคิดต่อ 🧘‍♂️", trait:"calm"}
-    ]
-  },
-  {
-    q: "คุณคิดว่าตัวเองเป็นผู้นำหรือผู้ตามในสถานการณ์ที่ต้องตัดสินใจร่วมกัน?",
-    options: [
-      {text:"ผู้นำชัดเจน 💪", trait:"leader"},
-      {text:"ชอบวิเคราะห์ก่อนตัดสินใจ 🤔", trait:"thinker"},
-      {text:"ตามเพื่อนแต่มีไอเดียลับ 🎨", trait:"creative"},
-      {text:"ยืดหยุ่นแล้วตามคนอื่นได้ 🧘‍♀️", trait:"calm"}
-    ]
-  },
-  {
-    q: "เวลาที่คุณมีความคิดสร้างสรรค์ คุณมักสร้างสรรค์สิ่งใหม่ ๆ เพื่อใครหรืออะไร?",
-    options: [
-      {text:"เพื่อคนอื่น ❤️", trait:"social"},
-      {text:"เพื่อความสนุกตัวเอง 😎", trait:"creative"},
-      {text:"เพื่อแก้ปัญหา 🤯", trait:"thinker"},
-      {text:"เพื่อทำตามแผนชีวิต 📅", trait:"planner"}
-    ]
-  }
-];
-
-function startGame() {
-  current = 0;
-  for (let key in traits) traits[key]=0;
-  showQuestion();
-}
-
-function showQuestion() {
-  if (current >= questions.length) {
-    showResult();
-    return;
-  }
-
-  const container = document.getElementById("app");
-  const q = questions[current];
-
-  let optionsHtml = '';
-  const letters = ['A','B','C','D'];
-  q.options.forEach((opt, idx) => {
-    optionsHtml += `<button onclick="chooseOption('${opt.trait}')">${letters[idx]}. ${opt.text}</button>`;
-  });
-
-  container.innerHTML = `
-    <div class="question">${current+1}. ${q.q}</div>
-    ${optionsHtml}
-  `;
-}
-
-function chooseOption(trait) {
-  if (trait) traits[trait] += 1;
-  current += 1;
-  showQuestion();
-}
-
-function showResult() {
-  const container = document.getElementById("app");
-  let maxTrait = Object.keys(traits).reduce((a, b) => traits[a] > traits[b] ? a : b);
-
-  let descriptions = {
-    planner: "คุณเป็นคนวางแผนทุกอย่างในชีวิตตั้งแต่เช้าจนค่ำ 📅 ...",
-    thinker: "คุณชอบคิดวิเคราะห์ทุกเรื่อง 🤯 ...",
-    leader: "คุณเกิดมาเป็นผู้นำ 💪 ...",
-    creative: "คุณเป็นคนที่มีไอเดียสุดล้ำ 🎨 ...",
-    social: "คุณเข้ากับคนง่าย 🕺 ...",
-    calm: "คุณใจเย็นมาก ❄️ ...",
-    brave: "คุณกล้าเผชิญทุกสถานการณ์ 🏄‍♂️ ...",
-    emotional: "คุณเข้าใจความรู้สึกตัวเองและคนอื่นสุด ๆ 😢 ...",
-    discipline: "คุณมีวินัยสุด ๆ 💪 ...",
-    freedom: "คุณรักอิสระ 🌈 ...",
-    reflective: "คุณชอบทบทวนตัวเอง 🤔 ..."
-  };
-
-  container.innerHTML = `
-    <h1>ผลลัพธ์ของคุณ 💖</h1>
-    <div class="result"><strong>บุคลิกภาพเด่น:</strong> ${maxTrait}</div>
-    <div class="result">${descriptions[maxTrait]}</div>
-    <button onclick="startGame()">เล่นใหม่</button>
-  `;
-}
-</script>
-
-</body>
-</html>
+  {q:"เมื่อคุณตื่นเช้ามา คุณคิดถึงอะไรเป็นอย่างแรก?", options:[
+    {text:"กาแฟ ☕", trait:"calm"}, {text:"แผนวันนี้ 📅", trait:"planner"},
+    {text:"คนที่รัก 💖", trait:"social"}, {text:"สนุกกับโลก 🌈", trait:"creative"}]},
+  
+  {q:"ความสุขของคุณขึ้นอยู่กับอะไร?", options:[
+    {text:"ตัวเอง 💪", trait:"freedom"}, {text:"วิเคราะห์ 😎", trait:"thinker"},
+    {text:"เพื่อน 🕺", trait:"social"}, {text:"สถานการณ์ 🎢", trait:"calm"}]},
+  
+  {q:"เวลาเจอความล้มเหลวคุณทำยังไง?", options:[
+    {text:"ลองใหม่ 💡", trait:"brave"}, {text:"วิเคราะห์ 🤯", trait:"thinker"},
+    {text:"ถามเพื่อน 🗣️", trait:"social"}, {text:"พัก 🧘‍♂️", trait:"calm"}]},
+  
+  {q:"คุณเป็นผู้นำหรือผู้ตาม?", options:[
+    {text:"ผู้นำ 💪", trait:"leader"}, {text:"วิเคราะห์ 🤔", trait:"thinker"},
+    {text:"ตามเพื่อนแต่มีไอเดีย 🎨", trait:"creative"}, {text:"ยืดหยุ่น 🧘‍♀️", trait:"calm"}]},
+  
+  {q:"เวลาสร้างสรรค์ คุณทำเพื่อใคร?", options:[
+    {text:"คนอื่น ❤️", trait:"social"}, {text:"ตัวเอง 😎
