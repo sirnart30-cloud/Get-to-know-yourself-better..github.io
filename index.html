@@ -9,48 +9,60 @@
 <style>
 body {
   font-family: 'Mali', cursive;
-  text-align: center;
   background: #ffe4f2;
-  padding: 20px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
+
+.container {
+  background: white;
+  padding: 30px;
+  border-radius: 20px;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+  text-align: center;
 }
 
 h1 {
   font-family: 'Kanit', sans-serif;
   color: #ff6fa5;
+  font-size: 28px;
 }
 
-.container {
-  background: white;
-  padding: 20px;
-  border-radius: 20px;
-  max-width: 500px;
-  margin: auto;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+p {
+  font-size: 20px;
+  line-height: 1.6;
 }
 
 button {
   display: block;
   width: 100%;
   margin: 10px 0;
-  padding: 12px;
+  padding: 15px;
   border: none;
-  border-radius: 12px;
+  border-radius: 15px;
   background: #ffb6d9;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 18px;
+  transition: 0.2s;
 }
 
 button:hover {
   background: #ff8fc3;
+  transform: scale(1.05);
 }
 </style>
 </head>
 
 <body>
 
-<h1>Do You Know Yourself? 💖</h1>
-
 <div class="container" id="game">
+  <h1>Do You Know Yourself? 💖</h1>
   <p>🌸 ลองตอบตามความรู้สึกจริงของคุณนะ</p>
   <button onclick="startGame()">เริ่มเกม</button>
 </div>
@@ -63,22 +75,28 @@ let traits = {
   calm:0, brave:0, emotional:0, discipline:0, freedom:0
 };
 
-const questions = [
-  {q:"เวลาว่างคุณมักจะทำอะไร?", a:[
-    {text:"วางแผนชีวิต", type:"planner"},
+const baseQuestions = [
+  {q:"ถ้ามีเวลาว่างทั้งวัน คุณจะทำอะไรเป็นอย่างแรก?", a:[
+    {text:"วางแผนสิ่งที่อยากทำ", type:"planner"},
     {text:"คิดเรื่องอนาคต", type:"thinker"},
-    {text:"ออกไปเจอคน", type:"social"}
+    {text:"ออกไปเจอเพื่อน", type:"social"}
   ]},
-  {q:"เวลามีปัญหา คุณจะ?", a:[
+  {q:"ถ้าเจอปัญหาใหญ่ คุณจะทำยังไง?", a:[
     {text:"คิดวิเคราะห์ก่อน", type:"thinker"},
     {text:"ลุยเลย", type:"brave"},
-    {text:"ค่อยๆแก้", type:"calm"}
+    {text:"ค่อย ๆ แก้", type:"calm"}
   ]},
+  {q:"เวลามีโอกาสใหม่ ๆ คุณมักจะ?", a:[
+    {text:"ลองทันที", type:"brave"},
+    {text:"คิดก่อน", type:"thinker"},
+    {text:"ดูสถานการณ์", type:"planner"}
+  ]}
 ];
 
-// สุ่มให้ครบ 33 ข้อ
+// ทำให้ครบ 33 ข้อ
+let questions = [];
 while(questions.length < 33){
-  questions.push(...questions.slice(0,2));
+  questions = questions.concat(baseQuestions);
 }
 
 function startGame(){
@@ -87,8 +105,13 @@ function startGame(){
 
 function showQuestion(){
   let q = questions[current];
-  let html = `<p>${q.q}</p>`;
-  
+
+  let html = `
+    <h1>Do You Know Yourself? 💖</h1>
+    <p>ข้อที่ ${current+1} / 33</p>
+    <p>${q.q}</p>
+  `;
+
   q.a.forEach(ans=>{
     html += `<button onclick="answer('${ans.type}')">${ans.text}</button>`;
   });
@@ -100,81 +123,9 @@ function answer(type){
   traits[type]++;
   current++;
 
-  if(current < 33){
-    showQuestion();
-  } else {
-    showResult();
-  }
-}
+  document.getElementById("game").innerHTML = "<p>💭 กำลังวิเคราะห์...</p>";
 
-function showResult(){
-  let top = Object.keys(traits).reduce((a,b)=>traits[a]>traits[b]?a:b);
-
-  let title="", detail="", advice="";
-
-  // 😏 กวน 5 สาย
-  if(top==="planner"){
-    title="สายวางแผนแต่ชีวิตชอบแหกโค้ง 📊";
-    detail="วางไว้ดีทุกอย่าง แต่ชีวิตจริงชอบมีอะไรแทรกตลอด";
-    advice="เผื่อใจให้สิ่งไม่คาดคิดบ้าง";
-  }
-  else if(top==="thinker"){
-    title="สายคิดเยอะจนเริ่มช้า 🧠";
-    detail="คิดครบทุกมุม แต่กว่าจะเริ่มได้คือช้าไปนิด";
-    advice="เริ่มก่อน แล้วค่อยปรับ";
-  }
-  else if(top==="social"){
-    title="สายคุยเก่ง แต่หมดพลังไว 🌟";
-    detail="อยู่กับคนสนุก แต่กลับมาคือหมดแรง";
-    advice="หาเวลาพักอยู่กับตัวเอง";
-  }
-  else if(top==="brave"){
-    title="สายลุยก่อน คิดทีหลัง 🔥";
-    detail="กล้าลอง กล้าเสี่ยง แต่บางทีก็พลาด";
-    advice="คิดนิดก่อนลุย จะไปได้ไกลกว่า";
-  }
-  else if(top==="creative"){
-    title="สายไอเดียล้น 🎨";
-    detail="คิดเก่งมาก แต่ยังไม่ค่อยลงมือ";
-    advice="เลือกสักอย่างแล้วทำจริง";
-  }
-
-  // 🌿 ดูดี 5 สาย
-  else if(top==="leader"){
-    title="สายผู้นำที่คนไว้ใจ";
-    detail="มีความรับผิดชอบ และคนรอบข้างเชื่อใจ";
-    advice="รับฟังคนอื่นเพิ่ม จะยิ่งเก่งขึ้น";
-  }
-  else if(top==="discipline"){
-    title="สายมุ่งมั่นและมีวินัย";
-    detail="ตั้งใจจริง และทำต่อเนื่องได้ดี";
-    advice="อย่าลืมพักบ้าง";
-  }
-  else if(top==="calm"){
-    title="สายใจเย็น มองระยะยาว";
-    detail="นิ่ง มีเหตุผล ไม่รีบร้อน";
-    advice="บางจังหวะต้องตัดสินใจเร็ว";
-  }
-  else if(top==="emotional"){
-    title="สายเข้าใจความรู้สึก";
-    detail="เข้าใจคนอื่น และมีความเห็นอกเห็นใจ";
-    advice="ตั้งขอบเขตให้ตัวเอง";
-  }
-  else if(top==="freedom"){
-    title="สายอิสระ เป็นตัวของตัวเอง";
-    detail="รักอิสระ ไม่ชอบข้อจำกัด";
-    advice="มีเป้าหมายจะช่วยให้ไปได้ไกล";
-  }
-
-  document.getElementById("game").innerHTML = `
-    <h2>ผลลัพธ์ของคุณ 💖</h2>
-    <h3>${title}</h3>
-    <p>${detail}</p>
-    <h4>✨ คำแนะนำ</h4>
-    <p>${advice}</p>
-  `;
-}
-</script>
-
-</body>
-</html>
+  setTimeout(()=>{
+    if(current < 33){
+      showQuestion();
+    } else
