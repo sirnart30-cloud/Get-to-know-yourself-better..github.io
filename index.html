@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <title>Do You Even Know Yourself?</title>
 
-<!-- ฟอนต์น่ารัก -->
 <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;500;700&display=swap" rel="stylesheet">
 
 <style>
@@ -53,6 +52,11 @@ button:hover {
   background: #ff7ab8;
 }
 
+img {
+  width: 120px;
+  border-radius: 15px;
+}
+
 .result {
   font-size: 20px;
 }
@@ -74,85 +78,4 @@ planner:0, thinker:0, leader:0, creative:0, social:0,
 calm:0, brave:0, emotional:0, discipline:0, freedom:0
 };
 
-const questions = [
-{q:"เวลาว่างคุณชอบทำอะไร?", a:[
-{text:"วางแผนอนาคต", t:"planner"},
-{text:"คิดเรื่องชีวิต", t:"thinker"},
-{text:"ออกไปเจอคน", t:"social"}
-]},
-{q:"คุณรับมือปัญหาแบบไหน?", a:[
-{text:"คิดก่อนทำ", t:"thinker"},
-{text:"ลุยเลย", t:"brave"},
-{text:"หาทางออกอย่างเป็นระบบ", t:"planner"}
-]},
-{q:"คุณเป็นคนแบบไหน?", a:[
-{text:"ชอบอิสระ", t:"freedom"},
-{text:"มีวินัย", t:"discipline"},
-{text:"มีอารมณ์ร่วมสูง", t:"emotional"}
-]}
-];
-
-// ทำให้ครบ 33 ข้อ
-while(questions.length < 33){
-  questions.push(...questions.slice(0,3));
-}
-
-function startGame(){
-  current = 0;
-  traits = {
-    planner:0, thinker:0, leader:0, creative:0, social:0,
-    calm:0, brave:0, emotional:0, discipline:0, freedom:0
-  };
-  showQuestion();
-}
-
-function showQuestion(){
-  let q = questions[current];
-  let html = `<div class="question">${q.q}</div>`;
-  
-  q.a.forEach(ans=>{
-    html += `<button onclick="answer('${ans.t}')">${ans.text}</button>`;
-  });
-
-  document.getElementById("app").innerHTML = html;
-}
-
-function answer(t){
-  traits[t]++;
-  current++;
-
-  if(current < 33){
-    showQuestion();
-  } else {
-    showResult();
-  }
-}
-
-function showResult(){
-  let top = Object.keys(traits).reduce((a,b)=>traits[a]>traits[b]?a:b);
-
-  let resultText = {
-planner:"🧠 นักวางแผนชีวิต\nคุณคิดเป็นระบบ มองไกล แต่บางทีคิดเยอะไป ลองผ่อนคลายบ้างนะ",
-thinker:"🤔 นักคิดลึก\nคุณเข้าใจชีวิตดี แต่ระวังจมกับความคิดตัวเอง",
-leader:"🔥 ผู้นำสายลุย\nคุณกล้าตัดสินใจ แต่ต้องฟังคนอื่นเพิ่ม",
-creative:"🎨 สายสร้างสรรค์\nคุณมีไอเดีย แต่ต้องลงมือทำให้มากขึ้น",
-social:"🎉 สายเข้าสังคม\nคุณเก่งเรื่องคน แต่ต้องมีเวลาอยู่กับตัวเอง",
-calm:"🌿 สายชิล\nคุณนิ่งมาก แต่บางทีควรกล้าลุย",
-brave:"⚡ สายบ้าพลัง\nคุณกล้า แต่ต้องคิดก่อนบ้าง",
-emotional:"💔 สายอ่อนไหว\nคุณเข้าใจคน แต่ต้องดูแลใจตัวเอง",
-discipline:"📅 สายมีวินัย\nคุณเก่งมาก แต่ชีวิตต้องมี fun บ้าง",
-freedom:"🕊️ สายอิสระ\nคุณรักอิสระ แต่ต้องมีเป้าหมาย"
-};
-
-  document.getElementById("app").innerHTML = `
-  <div class="result">
-    <h2>✨ ผลลัพธ์ของคุณ ✨</h2>
-    <p>${resultText[top]}</p>
-    <button onclick="startGame()">เล่นอีกครั้ง</button>
-  </div>
-  `;
-}
-</script>
-
-</body>
-</html>
+// ค
